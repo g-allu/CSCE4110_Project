@@ -1,59 +1,50 @@
-import random, time
-from SearchAlgorithms import linear_search, binary_search
-from SortingAlgorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort_wrapper
+from SearchAlgorithms import test_search_algorithms
+from SortingAlgorithms import test_sorting_algorithms
+from DataGeneration import generate_data
+from Validation import get_menu_choice, get_number_list
 
 
 def show_menu():
-    print("Please select your desired option:")
+    print("\nPlease select your desired option:")
     print("1. Search Algorithms")
     print("2. Sorting Algorithms")
     print("3. Exit")
 
-    return input("Enter your choice (1-3): ")
+    return get_menu_choice("\nEnter your choice (1-3): ", ['1', '2', '3'])
+
 
 def get_data():
-    # This function can be used to get data from the user or a file
+    # Returns the data to use, or None if the user wants to go back
     print("\nPlease choose the data source:")
     print("1. User Input")
     print("2. Randomly Generated Data")
-    print("3. Exit Program")
-    choice = input("Enter your choice (1-2): ")
+    print("3. Back to Main Menu")
+    choice = get_menu_choice("\nEnter your choice (1-3): ", ['1', '2', '3'])
+
     if choice == '1':
-        data = input("Enter a list of numbers separated by commas: ")
-        return [int(x.strip()) for x in data.split(',')]
-    elif choice == '2':
-        data = generate_data()
-        return data
-    elif choice == '3':
-        print("Exiting the program. Goodbye!")
-        return -1
-    else:
-        print("Invalid choice, please try again.")
-        return get_data()
+        return get_number_list("Enter a list of numbers separated by commas: ")
+    if choice == '2':
+        return generate_data()
+    return None
+
 
 def main():
-    print("\nWelcome to the Algorithm Testing Program!") 
+    print("\nWelcome to the Algorithm Testing Program!")
     while True:
         choice = show_menu()
 
-        if choice == '1':
-            data = get_data()
-            if data == -1:
-                break
-            test_search_algorithms(data)
-        elif choice == '2':
-            data = get_data()
-            if data == -1:
-                break
-            test_sorting_algorithms(data)
-        elif choice == '3':
+        if choice == '3':
             print("Exiting the program. Goodbye!")
             break
+
+        data = get_data()
+        if data is None:
+            continue
+
+        if choice == '1':
+            test_search_algorithms(data)
         else:
-            print("Invalid choice. Please try again.")
-
-
-
+            test_sorting_algorithms(data)
 
 
 if __name__ == "__main__":
