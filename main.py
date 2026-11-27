@@ -1,37 +1,51 @@
-import random, time
-from SearchAlgorithms import linear_search, binary_search
-from SortingAlgorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort_wrapper   
+from SearchAlgorithms import test_search_algorithms
+from SortingAlgorithms import test_sorting_algorithms
+from DataGeneration import generate_data
+from Validation import get_menu_choice, get_number_list
 
 
-#testing search algorithms and sorting algorithms
-a = list(range(1, 1001))
-result, comparisons = linear_search(a, 1000)
-result2, comparisons2 = binary_search(a, 1000)
-print(f"Linear\nIndex: {result}\nComparisons: {comparisons}\n")
-print(f"Binary\nIndex: {result2}\nComparisons: {comparisons2}\n")
+def show_menu():
+    print("\nPlease select your desired option:")
+    print("1. Search Algorithms")
+    print("2. Sorting Algorithms")
+    print("3. Exit")
+
+    return get_menu_choice("\nEnter your choice (1-3): ", ['1', '2', '3'])
 
 
-#creating a list of numbers to sort
-b = list(range(1, 1001))
-random.shuffle(b)
+def get_data():
+    # Returns the data to use, or None if the user wants to go back
+    print("\nPlease choose the data source:")
+    print("1. User Input")
+    print("2. Randomly Generated Data")
+    print("3. Back to Main Menu")
+    choice = get_menu_choice("\nEnter your choice (1-3): ", ['1', '2', '3'])
 
-c = b.copy()
-d = b.copy()
-e = b.copy()
-f = b.copy()
-
-comparisons, swaps = bubble_sort(b)
-print(f"Bubble\nComparisons: {comparisons}\nSwaps: {swaps}\n")
-    
-comparisons, swaps = selection_sort(c)
-print(f"Selection\nComparisons: {comparisons}\nSwaps: {swaps}\n")
+    if choice == '1':
+        return get_number_list("Enter a list of numbers separated by commas: ")
+    if choice == '2':
+        return generate_data()
+    return None
 
 
-comparisons, shifts = insertion_sort(d)
-print(f"Insertion\nComparisons: {comparisons}\nShifts: {shifts}\n")
+def main():
+    print("\nWelcome to the Algorithm Testing Program!")
+    while True:
+        choice = show_menu()
 
-sorted_values, comparisons = merge_sort(e)
-print(f"Merge\nComparisons: {comparisons}\n")
+        if choice == '3':
+            print("Exiting the program. Goodbye!")
+            break
 
-comparisons, swaps = quick_sort_wrapper(f)
-print(f"Quick\nComparisons: {comparisons}\nSwaps: {swaps}\n")
+        data = get_data()
+        if data is None:
+            continue
+
+        if choice == '1':
+            test_search_algorithms(data)
+        else:
+            test_sorting_algorithms(data)
+
+
+if __name__ == "__main__":
+    main()
